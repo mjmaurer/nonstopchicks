@@ -24,14 +24,11 @@
         node = {
           packages = with pkgs; [
             nodejs_22
-            yarn
-            corepack
-            git
             curl
             jq
           ];
           readme = ''
-            Helper commands:
+            # Commands
             - lint: run Biome
             - format: format with Biome
             - typecheck: TypeScript type check
@@ -42,13 +39,6 @@
         };
         package = node;
         readme = pkgs.writeText "readme" ''
-          # Commands
-
-          Some command description:
-          ```zsh
-          command
-          ```
-
           ${package.readme}
         '';
       in

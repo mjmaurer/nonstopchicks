@@ -1,133 +1,99 @@
-# Implementation Plan: Cornell Bird Cams TV
+# Cornell Bird Cams TV
 
-## 1. Project Overview
+A single-page React Router Framework (v7) application acting as an immersive "TV Station" for the Cornell Lab Bird Cams. The app uses react-tv-player to render a full-screen video experience that aggregates data from the YouTube Data API.
 
-A single-page Remix application acting as an immersive "TV Station" for the Cornell Lab Bird Cams. The
-app uses react-tv-player to render a full-screen video experience. It aggregates data from the YouTube
-Data API, caches it server-side to preserve quotas, and serves it to the client for a seamless viewing
-experience.
+[![Open in StackBlitz](https://developer.stackblitz.com/img/open_in_stackblitz.svg)](https://stackblitz.com/github/remix-run/react-router-templates/tree/main/default)
 
-## 2. Technical Stack & Requirements
+## Features
 
-- Framework: Remix (SPA mode / Single Route)
-- Language: TypeScript
-- Build Tool: Vite
-- Styling: Tailwind CSS
-- Linting/Formatting: Biome
-- Player Library: react-tv-player
-- Deployment: Docker
-- Data Source: YouTube Data API v3
-- Caching:
-  - Server Data: File-system JSON cache (TTL: 2 hours)
-  - Browser: HTTP Cache-Control headers (TTL: 1 hour)
+- 📺 Full-screen TV experience with react-tv-player
+- 🔴 Live stream support from Cornell Bird Cams
+- 📼 Recorded video browsing by species categories
+- 🎮 Arrow-key navigation optimized for TV devices
+- 💾 Server-side caching (2-hour TTL) to preserve YouTube API quotas
+- 🎨 Custom UI overlay with mode switching and filtering
+- 🔒 TypeScript throughout
+- 🐳 Docker deployment ready
+- 📖 [React Router v7 Framework](https://reactrouter.com/)
 
-## 3. Data Architecture
+## Getting Started
 
-### Backend (Remix Loader)
+### Installation
 
-The loader will act as the data aggregator. To prevent hitting YouTube API limits:
+Install the dependencies (note the legacy peer deps flag for react-tv-player compatibility):
 
-1 Check Cache: Look for a local file server-cache/youtube-data.json.
-2 Validate: If the file exists and is younger than 2 hours, parse and return it.
-3 Fetch (if stale): - Live Streams: Query search endpoint (channelId=CornellLab, eventType=live, type=video). - Playlists (Categories): Query playlists endpoint (channelId=CornellLab). - Recorded Videos: Query playlistItems for each playlist found.
-4 Transform: Sanitize data into a lightweight JSON structure.
-5 Save: Write to server-cache/youtube-data.json.
-6 Return: Send JSON to the frontend.
-
-### Data Model (JSON Structure)
-
-```typescript
-interface AppData {
-  liveStreams: VideoItem[];
-  playlists: {
-    id: string;
-    title: string; // e.g., "Red-tailed Hawks"
-    videos: VideoItem[];
-  }[];
-}
-
-interface VideoItem {
-  id: string; // YouTube Video ID
-  title: string;
-  thumbnail: string;
-}
+```bash
+npm install --legacy-peer-deps
 ```
 
-## 4. Frontend Design
+### Configuration
 
-### Layout
+To use real YouTube data, set your YouTube Data API v3 key:
 
-- Z-Index 0: react-tv-player taking up 100vw/100vh.
-- Z-Index 10: UI Overlay (hidden by default, toggled via a "Menu" button in the player or a floating
-  trigger).
-- Z-Index 20: Info Modal.
+```bash
+export YOUTUBE_API_KEY=your_api_key_here
+```
 
-### State Management
+If no API key is provided, the app will use mock data for demonstration.
 
-- Mode: 'live' | 'recorded'
-- Filters: selectedPlaylistId (nullable), selectedVideoId (nullable).
-- Playlist Queue: An array of VideoItem derived from the current Mode and Filters.
-  - Default Behavior: If no specific video is selected, shuffle the available list and slice 20
-    items.
-- Player State: Handled internally by react-tv-player (playing, index), but synced with our Queue.
+### Development
 
-### UI Components
+Start the development server with HMR:
 
-1 Player Wrapper: Configures react-tv-player with custom buttons.
-2 Control Panel (Overlay): - Mode Toggle: Switch between Live/Recorded. - Live Dropdown: Visible only in Live mode. - Category Dropdown: Visible in Recorded mode (Source: Playlists). - Video Dropdown: Visible in Recorded mode if Category is selected. - Note: Dropdowns will include an 'X' button to clear selection (resetting to random/all).
-3 Info Modal: Simple Tailwind modal with site details.
+```bash
+npm run dev
+```
 
-## 5. Implementation Steps
+Your application will be available at `http://localhost:5173`.
 
-### Phase 1: Project Initialization
+## Building for Production
 
-1 Initialize Remix with Vite and TypeScript.
-2 Install dependencies: react-tv-player, react-player (peer dep), tailwindcss, @biomejs/biome.
-3 Configure Biome (biome.json) for linting/formatting.
-4 Setup Tailwind CSS.
+Create a production build:
 
-### Phase 2: Backend & YouTube Integration
+```bash
+npm run build
+```
 
-1 Create app/services/youtube.server.ts.
-2 Implement fetchLiveStreams(), fetchPlaylists(), and fetchPlaylistItems().
-3 Implement getYouTubeData() which orchestrates the fetching and handles the File System Caching
-(reading/writing JSON to disk).
-4 Create the Loader in app/routes/\_index.tsx: - Call getYouTubeData. - Set Cache-Control: public, max-age=3600 (1 hour). - Return the data.
+## Deployment
 
-### Phase 3: Frontend Logic (The "Brain")
+### Docker Deployment
 
-1 Define TypeScript interfaces for the data.
-2 In \_index.tsx, use useLoaderData.
-3 Create a useStationLogic hook to handle: - Filtering data based on Mode (Live vs Recorded). - Handling Dropdown selections. - Generating the "Queue" (Random 20 vs Specific Selection). - Handling "Next/Prev" logic (cycling through the queue).
+To build and run using Docker:
 
-### Phase 4: UI Implementation
+```bash
+docker build -t my-app .
 
-1 Info Modal: Create a simple <Dialog> component.
-2 Control Overlay: Build the form with Tailwind. - Implement the Mode Toggle. - Implement <Select> components with a clear ('x') button.
-3 Player Integration: - Render <TVPlayer />. - Map the "Queue" to the player's url prop (or mediaList logic if using the player's internal
-playlist features, though managing url explicitly via React state is often more robust for custom
-filtering). - Inject a "Menu" or "Info" button into customButtons prop to trigger our overlays.
+# Run the container
+docker run -p 3000:3000 my-app
+```
 
-### Phase 5: Docker & Deployment
+The containerized application can be deployed to any platform that supports Docker, including:
 
-1 Create Dockerfile. - Base image: node:20-alpine. - Build steps: npm install, npm run build. - Runtime: Expose port 3000, start remix server. - Important: Ensure the server-cache directory exists and is writable in the container.
+- AWS ECS
+- Google Cloud Run
+- Azure Container Apps
+- Digital Ocean App Platform
+- Fly.io
+- Railway
 
-## 6. File Structure Preview
+### DIY Deployment
+
+If you're familiar with deploying Node applications, the built-in app server is production-ready.
+
+Make sure to deploy the output of `npm run build`
 
 ```
-app/
-├── components/
-│   ├── ControlPanel.tsx    # Dropdowns and Mode toggles
-│   ├── InfoModal.tsx       # Site info
-│   └── TVWrapper.tsx       # react-tv-player implementation
-├── routes/
-│   └── _index.tsx          # Main entry, Loader, State orchestration
-├── services/
-│   └── youtube.server.ts   # API fetching and File Caching logic
-├── styles/
-│   └── tailwind.css
-└── root.tsx
-Dockerfile
-biome.json
-vite.config.ts
+├── package.json
+├── package-lock.json (or pnpm-lock.yaml, or bun.lockb)
+├── build/
+│   ├── client/    # Static assets
+│   └── server/    # Server-side code
 ```
+
+## Styling
+
+This template comes with [Tailwind CSS](https://tailwindcss.com/) already configured for a simple default starting experience. You can use whatever CSS framework you prefer.
+
+---
+
+Built with ❤️ using React Router.
