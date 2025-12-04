@@ -1,6 +1,7 @@
 // @ts-ignore - react-tv-player has type issues with React 19
 import { TVPlayer, type TVPlayerButtonProps } from "react-tv-player"
 import { faCircleInfo, faCrow } from "@fortawesome/free-solid-svg-icons";
+import { useEffect, useState } from "react";
 
 interface TVWrapperProps {
   url: string
@@ -23,6 +24,11 @@ export function TVWrapper({
   onMenuPress,
   onInfoPress
 }: TVWrapperProps) {
+  const [isClient, setIsClient] = useState(false);
+
+  useEffect(() => {
+    setIsClient(true);
+  }, []);
   const customButtons: TVPlayerButtonProps[] = [
     {
       action: "custom",
@@ -61,6 +67,17 @@ export function TVWrapper({
       align: "right"
     }
   ]
+
+  if (!isClient) {
+    return (
+      <div className="w-full h-full flex items-center justify-center bg-gray-900">
+        <div className="text-center text-white">
+          <h2 className="text-2xl font-bold mb-2">Cornell Bird Cams TV</h2>
+          <p className="text-gray-300">Loading...</p>
+        </div>
+      </div>
+    )
+  }
 
   if (!url) {
     return (
