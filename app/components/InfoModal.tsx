@@ -6,8 +6,11 @@ export function InfoModal({ onClose }: InfoModalProps) {
   return (
     <div className="absolute inset-0 z-20 bg-black bg-opacity-75 flex items-center justify-center p-4">
       <div className="bg-gray-900 rounded-lg p-8 max-w-lg w-full">
-        <div className="flex justify-between items-center mb-6">
-          <h2 className="text-white text-2xl font-bold">Cornell Bird Cams TV</h2>
+        <div className="flex justify-center items-center mb-6">
+          <div className="flex flex-col items-center gap-3">
+            <img src="/full.jpeg" alt="NONSTOP CHICKS" className="w-30 h-30" />
+            <h2 className="text-white text-2xl font-bold">NONSTOP CHICKS</h2>
+          </div>
           <button
             onClick={onClose}
             className="text-white hover:text-gray-300 text-2xl leading-none"
@@ -19,8 +22,8 @@ export function InfoModal({ onClose }: InfoModalProps) {
 
         <div className="text-gray-300 space-y-4">
           <p>
-            Welcome to Cornell Bird Cams TV, an immersive viewing experience for the
-            Cornell Lab of Ornithology's bird cams.
+            Welcome to NONSTOP CHICKS. An endless stream of the finest birds and cutest chicks,
+            made possible by the flyest of Ivy League institutions.
           </p>
 
           <p>
@@ -41,7 +44,22 @@ export function InfoModal({ onClose }: InfoModalProps) {
 
           <div className="mt-4 pt-4 border-t border-gray-700">
             <p className="text-xs text-gray-400">
-              Powered by the Cornell Lab of Ornithology Bird Cams
+              Powered by the{' '}
+              <a
+                href="https://www.allaboutbirds.org/cams/"
+                target="_blank"
+                rel="noopener noreferrer"
+              >
+                Cornell Lab of Ornithology Bird Cams
+              </a>{' '}
+              and{' '}
+              <a
+                href="https://github.com/lewhunt/react-tv-player"
+                target="_blank"
+                rel="noopener noreferrer"
+              >
+                react-tv-player
+              </a>. Thanks so much to both for making this possible!
             </p>
           </div>
         </div>
