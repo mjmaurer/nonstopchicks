@@ -50,7 +50,15 @@ export function TVWrapper({
       disable: mediaCount <= 1
     },
     {
+      action: "skipback",
+      align: "center"
+    },
+    {
       action: "playpause",
+      align: "center"
+    },
+    {
+      action: "skipforward",
       align: "center"
     },
     {
@@ -62,10 +70,10 @@ export function TVWrapper({
       action: "mute",
       align: "right"
     },
-    {
-      action: "fullscreen",
-      align: "right"
-    }
+    // {
+    //   action: "fullscreen",
+    //   align: "right"
+    // }
   ]
 
   if (!isClient) {
@@ -102,12 +110,14 @@ export function TVWrapper({
       url={url}
       title={title}
       playing={true}
+      muted={true}
       customButtons={customButtons}
       mediaCount={mediaCount}
       mediaIndex={mediaIndex}
       playsinline={true}
       onNextPress={onNext}
       onPreviousPress={onPrevious}
+      onEnded={onNext}
       hideControlsOnArrowUp={true}
     />
   )
