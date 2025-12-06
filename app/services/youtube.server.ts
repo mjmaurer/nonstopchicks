@@ -12,6 +12,7 @@ interface CacheData {
 }
 
 interface YouTubeSearchResponse {
+  nextPageToken?: string
   items: Array<{
     id: { videoId: string }
     snippet: {
@@ -22,6 +23,7 @@ interface YouTubeSearchResponse {
 }
 
 interface YouTubePlaylistsResponse {
+  nextPageToken?: string
   items: Array<{
     id: string
     snippet: {
@@ -31,6 +33,7 @@ interface YouTubePlaylistsResponse {
 }
 
 interface YouTubePlaylistItemsResponse {
+  nextPageToken?: string
   items: Array<{
     snippet: {
       resourceId: { videoId: string }
@@ -113,10 +116,18 @@ function getMockData(endpoint: string): any {
 }
 
 async function fetchLiveStreams(): Promise<VideoItem[]> {
-  const endpoint = `search?part=snippet&channelId=${CORNELL_LAB_CHANNEL_ID}&eventType=live&type=video&maxResults=10`
-  const data: YouTubeSearchResponse = await fetchFromYouTube(endpoint)
+  const base = `search?part=snippet&channelId=${CORNELL_LAB_CHANNEL_ID}&eventType=live&type=video&maxResults=50`
+  let pageToken: string | undefined
+  const allItems: YouTubeSearchResponse["items"] = []
 
-  return data.items.map(item => ({
+  do {
+    const endpoint = `${base}${pageToken ? `&pageToken=${pageToken}` : ""}`
+    const data: YouTubeSearchResponse = await fetchFromYouTube(endpoint)
+    allItems.push(...data.items)
+    pageToken = data.nextPageToken
+  } while (pageToken)
+
+  return allItems.map(item => ({
     id: item.id.videoId,
     title: item.snippet.title,
     thumbnail: item.snippet.thumbnails.medium.url
@@ -124,12 +135,20 @@ async function fetchLiveStreams(): Promise<VideoItem[]> {
 }
 
 async function fetchPlaylists(): Promise<Playlist[]> {
-  const endpoint = `playlists?part=snippet&channelId=${CORNELL_LAB_CHANNEL_ID}&maxResults=20`
-  const data: YouTubePlaylistsResponse = await fetchFromYouTube(endpoint)
+  const base = `playlists?part=snippet&channelId=${CORNELL_LAB_CHANNEL_ID}&maxResults=50`
+  let pageToken: string | undefined
+  const allPlaylists: YouTubePlaylistsResponse["items"] = []
+
+  do {
+    const endpoint = `${base}${pageToken ? `&pageToken=${pageToken}` : ""}`
+    const data: YouTubePlaylistsResponse = await fetchFromYouTube(endpoint)
+    allPlaylists.push(...data.items)
+    pageToken = data.nextPageToken
+  } while (pageToken)
 
   const playlists: Playlist[] = []
 
-  for (const playlist of data.items) {
+  for (const playlist of allPlaylists) {
     const videos = await fetchPlaylistItems(playlist.id)
     playlists.push({
       id: playlist.id,
@@ -142,10 +161,18 @@ async function fetchPlaylists(): Promise<Playlist[]> {
 }
 
 async function fetchPlaylistItems(playlistId: string): Promise<VideoItem[]> {
-  const endpoint = `playlistItems?part=snippet&playlistId=${playlistId}&maxResults=50`
-  const data: YouTubePlaylistItemsResponse = await fetchFromYouTube(endpoint)
+  const base = `playlistItems?part=snippet&playlistId=${playlistId}&maxResults=50`
+  let pageToken: string | undefined
+  const allItems: YouTubePlaylistItemsResponse["items"] = []
 
-  return data.items
+  do {
+    const endpoint = `${base}${pageToken ? `&pageToken=${pageToken}` : ""}`
+    const data: YouTubePlaylistItemsResponse = await fetchFromYouTube(endpoint)
+    allItems.push(...data.items)
+    pageToken = data.nextPageToken
+  } while (pageToken)
+
+  return allItems
     .filter(item => item.snippet.resourceId?.videoId)
     .map(item => ({
       id: item.snippet.resourceId.videoId,
