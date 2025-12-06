@@ -4,7 +4,7 @@ import type { AppData, VideoItem, Playlist } from "../types"
 
 const CACHE_FILE = path.join(process.cwd(), "server-cache", "youtube-data.json")
 const CACHE_TTL = 2 * 60 * 60 * 1000 // 2 hours in milliseconds
-const CORNELL_LAB_CHANNEL_ID = "UC06DfmS1Ob88Iia3xZYI9dg"
+const CORNELL_LAB_CHANNEL_ID = "UCZXZQxS3d6NpR-eH_gdDwYA"
 
 interface CacheData {
   timestamp: number

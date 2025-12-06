@@ -25,6 +25,8 @@ export default function Index({ }: Route.ComponentProps) {
     setSelectedPlaylistId,
     selectedVideoId,
     setSelectedVideoId,
+    selectedStreamId,
+    setSelectedStreamId,
     queue,
     currentIndex,
     handleNext,
@@ -75,6 +77,8 @@ export default function Index({ }: Route.ComponentProps) {
               setSelectedPlaylistId={setSelectedPlaylistId}
               selectedVideoId={selectedVideoId}
               setSelectedVideoId={setSelectedVideoId}
+              selectedStreamId={selectedStreamId}
+              setSelectedStreamId={setSelectedStreamId}
               goToVideo={goToVideo}
             />
           </div>

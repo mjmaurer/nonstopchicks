@@ -5,14 +5,21 @@ export function useStationLogic(data: AppData) {
   const [mode, setMode] = useState<Mode>("live")
   const [selectedPlaylistId, setSelectedPlaylistId] = useState<string | null>(null)
   const [selectedVideoId, setSelectedVideoId] = useState<string | null>(null)
+  const [selectedStreamId, setSelectedStreamId] = useState<string | null>(null)
   const [currentIndex, setCurrentIndex] = useState(0)
 
   // Generate queue based on current state
   const queue = useMemo((): VideoItem[] => {
     if (mode === "live") {
-      // Return live streams, shuffled and limited to 20
-      const shuffled = [...data.liveStreams].sort(() => Math.random() - 0.5)
-      return shuffled.slice(0, 20)
+      if (selectedStreamId) {
+        // Find specific stream
+        const stream = data.liveStreams.find(s => s.id === selectedStreamId)
+        return stream ? [stream] : []
+      } else {
+        // Return live streams, shuffled and limited to 20
+        const shuffled = [...data.liveStreams].sort(() => Math.random() - 0.5)
+        return shuffled.slice(0, 20)
+      }
     } else {
       // Recorded mode
       if (selectedVideoId) {
@@ -33,7 +40,7 @@ export function useStationLogic(data: AppData) {
         return shuffled.slice(0, 20)
       }
     }
-  }, [mode, selectedPlaylistId, selectedVideoId, data])
+  }, [mode, selectedPlaylistId, selectedVideoId, selectedStreamId, data])
 
   // Reset index when queue changes
   useEffect(() => {
@@ -44,6 +51,7 @@ export function useStationLogic(data: AppData) {
   useEffect(() => {
     setSelectedPlaylistId(null)
     setSelectedVideoId(null)
+    setSelectedStreamId(null)
   }, [mode])
 
   const handleNext = useCallback(() => {
@@ -78,6 +86,8 @@ export function useStationLogic(data: AppData) {
     setSelectedPlaylistId,
     selectedVideoId,
     setSelectedVideoId,
+    selectedStreamId,
+    setSelectedStreamId,
     queue,
     currentIndex,
     handleNext,

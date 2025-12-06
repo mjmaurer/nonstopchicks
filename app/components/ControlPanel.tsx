@@ -9,6 +9,8 @@ interface ControlPanelProps {
   setSelectedPlaylistId: (id: string | null) => void
   selectedVideoId: string | null
   setSelectedVideoId: (id: string | null) => void
+  selectedStreamId: string | null
+  setSelectedStreamId: (id: string | null) => void
   goToVideo: (videoId: string) => void
 }
 
@@ -21,10 +23,16 @@ export function ControlPanel({
   setSelectedPlaylistId,
   selectedVideoId,
   setSelectedVideoId,
+  selectedStreamId,
+  setSelectedStreamId,
   goToVideo
 }: ControlPanelProps) {
   const selectedPlaylist = selectedPlaylistId
     ? playlists.find(p => p.id === selectedPlaylistId)
+    : null
+
+  const selectedStream = selectedStreamId
+    ? liveStreams.find(s => s.id === selectedStreamId)
     : null
 
   const handleModeChange = (newMode: Mode) => {
@@ -44,6 +52,14 @@ export function ControlPanel({
     }
   }
 
+  const handleLiveStreamChange = (streamId: string) => {
+    const newStreamId = streamId === "" ? null : streamId
+    setSelectedStreamId(newStreamId)
+    if (newStreamId) {
+      goToVideo(newStreamId)
+    }
+  }
+
   const clearPlaylistSelection = () => {
     setSelectedPlaylistId(null)
     setSelectedVideoId(null)
@@ -51,6 +67,10 @@ export function ControlPanel({
 
   const clearVideoSelection = () => {
     setSelectedVideoId(null)
+  }
+
+  const clearStreamSelection = () => {
+    setSelectedStreamId(null)
   }
 
   return (
@@ -87,12 +107,23 @@ export function ControlPanel({
       {/* Live Mode Controls */}
       {mode === "live" && (
         <div>
-          <label className="block text-white text-sm font-medium mb-2">Live Streams</label>
+          <label className="block text-white text-sm font-medium mb-2">
+            Live Streams
+            {selectedStreamId && (
+              <button
+                onClick={clearStreamSelection}
+                className="ml-2 text-blue-400 hover:text-blue-300 text-xs"
+                type="button"
+              >
+                × Clear
+              </button>
+            )}
+          </label>
           {liveStreams.length > 0 ? (
             <select
               className="w-full bg-gray-800 border border-gray-700 rounded-md py-2 px-3 text-white focus:outline-none focus:ring-2 focus:ring-blue-500"
-              value=""
-              onChange={() => {}} // Live streams are automatically shuffled
+              value={selectedStreamId || ""}
+              onChange={(e) => handleLiveStreamChange(e.target.value)}
             >
               <option value="">Random Live Streams ({liveStreams.length})</option>
               {liveStreams.map(stream => (
@@ -174,7 +205,11 @@ export function ControlPanel({
       <div className="pt-4 border-t border-gray-700">
         <p className="text-gray-400 text-xs">
           {mode === "live" ? (
-            `Showing ${liveStreams.length} live streams`
+            selectedStreamId && selectedStream ? (
+              `Showing: ${selectedStream.title}`
+            ) : (
+              `Showing ${liveStreams.length} live streams (random)`
+            )
           ) : selectedVideoId ? (
             "Showing specific video"
           ) : selectedPlaylistId ? (

@@ -4,20 +4,26 @@ interface InfoModalProps {
 
 export function InfoModal({ onClose }: InfoModalProps) {
   return (
-    <div className="absolute inset-0 z-20 bg-black bg-opacity-75 flex items-center justify-center p-4">
-      <div className="bg-gray-900 rounded-lg p-8 max-w-lg w-full">
+    <div
+      className="absolute inset-0 z-20 bg-black bg-opacity-75 flex items-center justify-center p-4"
+      onClick={onClose}
+    >
+      <div
+        className="bg-gray-900 rounded-lg p-8 max-w-lg w-full relative"
+        onClick={(e) => e.stopPropagation()}
+      >
+        <button
+          onClick={onClose}
+          className="absolute top-4 right-4 text-white hover:text-gray-300 text-4xl leading-none"
+          type="button"
+        >
+          ×
+        </button>
         <div className="flex justify-center items-center mb-6">
           <div className="flex flex-col items-center gap-3">
             <img src="/full.jpeg" alt="NONSTOP CHICKS" className="w-30 h-30" />
             <h2 className="text-white text-2xl font-bold">NONSTOP CHICKS</h2>
           </div>
-          <button
-            onClick={onClose}
-            className="text-white hover:text-gray-300 text-2xl leading-none"
-            type="button"
-          >
-            ×
-          </button>
         </div>
 
         <div className="text-gray-300 space-y-4">
