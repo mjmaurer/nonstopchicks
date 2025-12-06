@@ -1,5 +1,5 @@
 // @ts-ignore - react-tv-player has type issues with React 19
-import { TVPlayer, type TVPlayerButtonProps } from "react-tv-player"
+import { TVPlayer, useTVPlayerStore, type TVPlayerButtonProps } from "react-tv-player";
 import { faCircleInfo, faCrow } from "@fortawesome/free-solid-svg-icons";
 import { useEffect, useState } from "react";
 

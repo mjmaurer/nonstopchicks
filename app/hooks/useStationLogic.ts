@@ -1,3 +1,5 @@
+// @ts-ignore - react-tv-player has type issues with React 19
+import { TVPlayer, useTVPlayerStore, type TVPlayerButtonProps } from "react-tv-player";
 import { useState, useEffect, useCallback, useMemo } from "react"
 import type { AppData, Mode, VideoItem } from "../types"
 
@@ -7,6 +9,7 @@ export function useStationLogic(data: AppData) {
   const [selectedVideoId, setSelectedVideoId] = useState<string | null>(null)
   const [selectedStreamId, setSelectedStreamId] = useState<string | null>(null)
   const [currentIndex, setCurrentIndex] = useState(0)
+  const actions = useTVPlayerStore((s: any) => s.actions);
 
   // Generate queue based on current state
   const queue = useMemo((): VideoItem[] => {
@@ -57,17 +60,20 @@ export function useStationLogic(data: AppData) {
   const handleNext = useCallback(() => {
     if (queue.length === 0) return
     setCurrentIndex((prev) => (prev + 1) % queue.length)
+    actions.setPlaying(true);
   }, [queue.length])
 
   const handlePrevious = useCallback(() => {
     if (queue.length === 0) return
-    setCurrentIndex((prev) => (prev - 1 + queue.length) % queue.length)
+    setCurrentIndex((prev) => (prev - 1 + queue.length) % queue.length);
+    actions.setPlaying(true);
   }, [queue.length])
 
   const goToVideo = useCallback((videoId: string) => {
     const index = queue.findIndex(v => v.id === videoId)
     if (index !== -1) {
       setCurrentIndex(index)
+      actions.setPlaying(true);
     }
   }, [queue])
 
