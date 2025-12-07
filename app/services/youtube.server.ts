@@ -2,7 +2,8 @@ import fs from "fs"
 import path from "path"
 import type { AppData, VideoItem, Playlist } from "../types"
 
-const CACHE_FILE = path.join(process.cwd(), "server-cache", "youtube-data.json")
+const CACHE_DIR = process.env.YOUTUBE_CACHE_DIR || "/data"
+const CACHE_FILE = path.join(CACHE_DIR, "youtube-data.json")
 const CORNELL_LAB_CHANNEL_ID = "UCZXZQxS3d6NpR-eH_gdDwYA"
 
 interface CacheData {

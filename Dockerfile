@@ -14,14 +14,19 @@ COPY --from=development-dependencies-env /app/node_modules /app/node_modules
 WORKDIR /app
 RUN npm run build
 
+
 FROM node:20-alpine
 COPY ./package.json package-lock.json /app/
 COPY --from=production-dependencies-env /app/node_modules /app/node_modules
 COPY --from=build-env /app/build /app/build
 WORKDIR /app
 
-# Create cache directory with proper permissions
-RUN mkdir -p server-cache && chown -R node:node /app
+# Configure cache directory for runtime volume
+ENV YOUTUBE_CACHE_DIR=/data
+VOLUME ["/data"]
+
+# Ensure proper permissions
+RUN mkdir -p /data && chown -R node:node /data /app
 
 # Switch to non-root user
 USER node
