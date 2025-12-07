@@ -3,7 +3,6 @@ import path from "path"
 import type { AppData, VideoItem, Playlist } from "../types"
 
 const CACHE_FILE = path.join(process.cwd(), "server-cache", "youtube-data.json")
-const CACHE_TTL = 2 * 60 * 60 * 1000 // 2 hours in milliseconds
 const CORNELL_LAB_CHANNEL_ID = "UCZXZQxS3d6NpR-eH_gdDwYA"
 
 interface CacheData {
@@ -190,12 +189,7 @@ function readCache(): CacheData | null {
     const cacheContent = fs.readFileSync(CACHE_FILE, "utf-8")
     const cacheData: CacheData = JSON.parse(cacheContent)
 
-    // Check if cache is still valid
-    const now = Date.now()
-    if (now - cacheData.timestamp > CACHE_TTL) {
-      return null
-    }
-
+    // TTL check removed: always return data if file exists and parses
     return cacheData
   } catch (error) {
     console.error("Error reading cache:", error)
@@ -222,14 +216,7 @@ function writeCache(data: AppData): void {
   }
 }
 
-export async function getYouTubeData(): Promise<AppData> {
-  // Check cache first
-  const cached = readCache()
-  if (cached) {
-    console.log("Returning cached YouTube data")
-    return cached.data
-  }
-
+export async function rebuildCache(): Promise<AppData> {
   console.log("Fetching fresh YouTube data")
 
   try {
@@ -256,4 +243,15 @@ export async function getYouTubeData(): Promise<AppData> {
       playlists: []
     }
   }
+}
+
+export async function getYouTubeData(): Promise<AppData> {
+  // Check cache first
+  const cached = readCache()
+  if (cached) {
+    console.log("Returning cached YouTube data")
+    return cached.data
+  }
+
+  return rebuildCache()
 }
