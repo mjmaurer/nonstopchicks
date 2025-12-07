@@ -20,7 +20,7 @@ export function meta(): Array<{ property?: string; name?: string; content: strin
     { property: "og:title", content: "NONSTOP CHICKS" },
     { property: "og:description", content: "An endless stream of the finest birds and cutest chicks, made possible by the flyest of Ivy League institutions." },
     { property: "og:type", content: "website" },
-    { property: "og:image", content: "https://nonstopchicks.com/full.jpeg" },
+    { property: "og:image", content: "https://nonstopchicks.com/opengraph.jpeg" },
     { name: "twitter:card", content: "summary_large_image" },
     { name: "twitter:title", content: "NONSTOP CHICKS" },
     { name: "twitter:description", content: "An endless stream of the finest birds and cutest chicks, made possible by the flyest of Ivy League institutions." },

@@ -34,10 +34,10 @@ export function Layout({ children }: { children: React.ReactNode }) {
       <head>
         <meta charSet="utf-8" />
         <meta name="viewport" content="width=device-width, initial-scale=1" />
-        <meta property="og:image" content="https://nonstopchicks.com/full.jpeg" />
+        <meta property="og:image" content="https://nonstopchicks.com/opengraph.jpeg" />
         <meta property="og:image:type" content="image/jpeg" />
         <meta name="twitter:card" content="summary_large_image" />
-        <meta name="twitter:image" content="https://nonstopchicks.com/full.jpeg" />
+        <meta name="twitter:image" content="https://nonstopchicks.com/opengraph.jpeg" />
         <Meta />
         <Links />
       </head>
