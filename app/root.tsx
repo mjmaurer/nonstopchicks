@@ -34,12 +34,10 @@ export function Layout({ children }: { children: React.ReactNode }) {
       <head>
         <meta charSet="utf-8" />
         <meta name="viewport" content="width=device-width, initial-scale=1" />
-        <meta property="og:image" content="/android-chrome-512x512.png" />
-        <meta property="og:image:width" content="512" />
-        <meta property="og:image:height" content="512" />
-        <meta property="og:image:type" content="image/png" />
-        <meta name="twitter:card" content="summary" />
-        <meta name="twitter:image" content="/android-chrome-512x512.png" />
+        <meta property="og:image" content="/full.jpeg" />
+        <meta property="og:image:type" content="image/jpeg" />
+        <meta name="twitter:card" content="summary_large_image" />
+        <meta name="twitter:image" content="/full.jpeg" />
         <Meta />
         <Links />
       </head>

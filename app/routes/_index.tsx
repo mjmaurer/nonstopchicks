@@ -1,5 +1,5 @@
 import type { Route } from "./+types/_index"
-import { useLoaderData } from "react-router"
+import { useLoaderData, data as rrData } from "react-router"
 import { getYouTubeData } from "../services/youtube.server"
 import type { AppData } from "../types"
 import { useState } from "react"
@@ -10,7 +10,27 @@ import { useStationLogic } from "../hooks/useStationLogic"
 
 export async function loader(): Promise<AppData> {
   const data = await getYouTubeData()
-  return data
+  return data; 
+}
+
+export function meta(): Array<{ property?: string; name?: string; content: string; title?: string }> {
+  return [
+    { title: "NONSTOP CHICKS", content: "NONSTOP CHICKS" },
+    { name: "description", content: "An endless stream of the finest birds and cutest chicks, made possible by the flyest of Ivy League institutions." },
+    { property: "og:title", content: "NONSTOP CHICKS - Cornell Bird Cams TV" },
+    { property: "og:description", content: "An endless stream of the finest birds and cutest chicks, made possible by the flyest of Ivy League institutions." },
+    { property: "og:type", content: "website" },
+    { property: "og:image", content: "/full.jpeg" },
+    { name: "twitter:card", content: "summary_large_image" },
+    { name: "twitter:title", content: "NONSTOP CHICKS" },
+    { name: "twitter:description", content: "An endless stream of the finest birds and cutest chicks, made possible by the flyest of Ivy League institutions." },
+  ];
+}
+
+export function headers(_: Route.HeadersArgs) {
+  return {
+    "Cache-Control": "public, max-age=1200, s-maxage=1200"
+  };
 }
 
 export default function Index({ }: Route.ComponentProps) {
