@@ -1,6 +1,7 @@
 // @ts-ignore - react-tv-player has type issues with React 19
 import { TVPlayer, useTVPlayerStore, type TVPlayerButtonProps } from "react-tv-player";
 import { faCircleInfo, faCrow } from "@fortawesome/free-solid-svg-icons";
+import { faYoutube } from "@fortawesome/free-brands-svg-icons";
 import { useEffect, useState } from "react";
 
 interface TVWrapperProps {
@@ -65,6 +66,15 @@ export function TVWrapper({
       action: "next",
       align: "center",
       disable: mediaCount <= 1
+    },
+    {
+      action: "custom",
+      align: "right",
+      label: "Open on YouTube",
+      faIcon: faYoutube,
+      onPress: () => {
+        window.location.href = url;
+      }
     },
     {
       action: "mute",
