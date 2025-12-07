@@ -1,6 +1,6 @@
 // @ts-ignore - react-tv-player has type issues with React 19
 import { TVPlayer, useTVPlayerStore, type TVPlayerButtonProps } from "react-tv-player";
-import { faCircleInfo, faCrow } from "@fortawesome/free-solid-svg-icons";
+import { faCircleInfo, faCrow, faGift } from "@fortawesome/free-solid-svg-icons";
 import { faYoutube } from "@fortawesome/free-brands-svg-icons";
 import { useEffect, useState } from "react";
 
@@ -74,6 +74,15 @@ export function TVWrapper({
       faIcon: faYoutube,
       onPress: () => {
         window.location.href = url;
+      }
+    },
+    {
+      action: "custom",
+      align: "right",
+      label: "Donate to the Bird Lab",
+      faIcon: faGift,
+      onPress: () => {
+        window.open("https://give.birds.cornell.edu/page/182972/donate", "_blank");
       }
     },
     {
