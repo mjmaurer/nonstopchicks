@@ -14,6 +14,14 @@ COPY --from=development-dependencies-env /app/node_modules /app/node_modules
 WORKDIR /app
 RUN npm run build
 
+FROM node:20-alpine AS cache-build-env
+COPY . /app/
+COPY --from=development-dependencies-env /app/node_modules /app/node_modules
+WORKDIR /app
+# Configure cache directory for runtime volume
+ENV YOUTUBE_CACHE_DIR=/data
+VOLUME ["/data"]
+RUN npm run rebuild-cache
 
 FROM node:20-alpine AS production
 COPY ./package.json package-lock.json /app/
