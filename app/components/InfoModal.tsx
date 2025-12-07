@@ -28,8 +28,8 @@ export function InfoModal({ onClose }: InfoModalProps) {
 
         <div className="text-gray-300 space-y-4">
           <p>
-            Welcome to NONSTOP CHICKS. An endless stream of the finest birds and cutest chicks,
-            made possible by the flyest of Ivy League institutions.
+            Welcome to NONSTOP CHICKS. An endless stream of the finest birds and cutest chicks;
+            all made possible by the flyest of Ivy League institutions.
           </p>
 
           <p>
@@ -38,13 +38,18 @@ export function InfoModal({ onClose }: InfoModalProps) {
             species categories, or select specific videos.
           </p>
 
+          <p>
+            Thank you to the Cornell Lab of Ornithology for providing these amazing bird cams.
+            Nonstop Chicks is not affiliated with them in any way (outside of being big fans of their work).
+            Please support them at <a href="https://give.birds.cornell.edu/page/182972/donate" target="_blank" rel="noopener noreferrer" className="text-purple-400 underline">https://give.birds.cornell.edu/page/182972/donate</a>.
+          </p>
+
           <div className="mt-6 pt-4 border-t border-gray-700">
             <h3 className="text-white font-semibold mb-2">Controls:</h3>
             <ul className="text-sm space-y-1">
-              <li>• Use arrow keys to navigate player controls</li>
-              <li>• Press the Menu button to access viewing options</li>
+              <li>• Press the bird button to access viewing options</li>
               <li>• Next/Previous buttons cycle through the current queue</li>
-              <li>• Play/Pause to control video playback</li>
+              <li>• Use arrow keys to navigate player controls</li>
             </ul>
           </div>
 
@@ -57,7 +62,7 @@ export function InfoModal({ onClose }: InfoModalProps) {
                 rel="noopener noreferrer"
               >
                 Cornell Lab of Ornithology Bird Cams
-              </a>{' '}
+              </a>{', YouTube, '}
               and{' '}
               <a
                 href="https://github.com/lewhunt/react-tv-player"
