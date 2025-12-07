@@ -17,7 +17,7 @@ export function meta(): Array<{ property?: string; name?: string; content: strin
   return [
     { title: "NONSTOP CHICKS", content: "NONSTOP CHICKS" },
     { name: "description", content: "An endless stream of the finest birds and cutest chicks, made possible by the flyest of Ivy League institutions." },
-    { property: "og:title", content: "NONSTOP CHICKS - Cornell Bird Cams TV" },
+    { property: "og:title", content: "NONSTOP CHICKS" },
     { property: "og:description", content: "An endless stream of the finest birds and cutest chicks, made possible by the flyest of Ivy League institutions." },
     { property: "og:type", content: "website" },
     { property: "og:image", content: "/full.jpeg" },
