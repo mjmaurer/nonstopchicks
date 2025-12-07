@@ -5,11 +5,11 @@ interface InfoModalProps {
 export function InfoModal({ onClose }: InfoModalProps) {
   return (
     <div
-      className="absolute inset-0 z-20 bg-black bg-opacity-75 flex items-center justify-center p-4"
+      className="absolute inset-0 z-20 bg-black bg-opacity-75 flex justify-center p-4 overflow-y-auto"
       onClick={onClose}
     >
       <div
-        className="bg-gray-900 rounded-lg p-8 max-w-lg w-full relative"
+        className="bg-gray-900 rounded-lg p-8 max-w-lg w-full relative my-auto min-h-fit"
         onClick={(e) => e.stopPropagation()}
       >
         <button

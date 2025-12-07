@@ -124,7 +124,7 @@ export function TVWrapper({
       customButtons={customButtons}
       mediaCount={mediaCount}
       mediaIndex={mediaIndex}
-      playsinline={true}
+      playsinline={false}
       onNextPress={onNext}
       onPreviousPress={onPrevious}
       onEnded={onNext}
